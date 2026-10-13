@@ -17,13 +17,13 @@ class MoneyTest {
         @Test
         void exposes_amount_and_currency_of_valid_euro_money() {
             Money m = new Money(new BigDecimal("10.00"),euro );
- 
+
             assertEquals(new BigDecimal("10.00"), m.amount());
             assertEquals(euro, m.currency());
         }
 
         @Test
-        void rejects_null_amount() {
+        void rejects_null_amounte() {
             assertThrows(NullPointerException.class, () -> new Money(null, euro));
         }
 
