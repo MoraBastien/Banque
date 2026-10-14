@@ -23,7 +23,7 @@ class MoneyTest {
         }
 
         @Test
-        void rejects_null_amounte() {
+        void rejects_null_amount() {
             assertThrows(NullPointerException.class, () -> new Money(null, euro));
         }
 
