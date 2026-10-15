@@ -3,9 +3,9 @@ package app.com;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 
 class IbanTest {
@@ -14,14 +14,12 @@ class IbanTest {
     class Creation {
         @Test
         void accepts_valid_luxembourg_iban() {
-            Iban i = new Iban("LU", 23,new BigInteger("280019400644750000"));
-
+            assertDoesNotThrow(() -> new Iban("LU280019400644750000"));
         }
 
         @Test
-        void refuse_null_attributes() {
-            assertThrows(NullPointerException.class, () -> new Iban(null, 23,new BigInteger("280019400644750000")));
-            assertThrows(NullPointerException.class, () -> new Iban(null, 23,null));
+        void reject_null_iban() {
+            assertThrows(NullPointerException.class, () -> new Iban(null));
         }
     }
 
@@ -30,24 +28,32 @@ class IbanTest {
 
         @Test
         void accepts_iban_with_spaces(){
-            assertDoesNotThrow(() -> new Iban("FR",76,new BigInteger("3000 6000 0112 3456 7890 189")));
+            Iban i1 = new Iban("LU280019400644750000");
+            Iban i2 = new Iban("LU28 0019 4006 4475 0000");
+            assertEquals(i1.value(),i2.value());
         }
 
         @Test
-        void accepts_lowercase_iban(){
-            assertDoesNotThrow(() -> new Iban("fr",76,new BigInteger("30006000011234567890189")));
+        void accepts_iban_with_lowercase(){
+            Iban i1 = new Iban("lu280019400644750000");
+            Iban i2 = new Iban("LU280019400644750000");
+            assertEquals(i1.value(),i2.value());
         }
 
         @Test
         void two_formatted_ibans_are_equal(){
-            Iban i1 = new Iban("FR",76,new BigInteger("3000 6000 0112 3456 7890 189"));
-            Iban i2 = new Iban("fr",76,new BigInteger("30006000011234567890189"));
-            assertEquals(i1,i2);
+            Iban i1 = new Iban("LU28 0019 4006 4475 0000");
+            Iban i2 = new Iban("lu280019400644750000");
+            assertEquals(i1.value(),i2.value());
         }
     }
 
     @Nested
     class Validation {
+        @Test
+        void reject_empty_iban() {
+            assertThrows(IllegalArgumentException.class, () -> new Iban(""));
+        }
 
     }
 }
